@@ -1,1 +1,0 @@
-export const URL_BASE_API = "https://sponsor.mexpenses.com.br";
