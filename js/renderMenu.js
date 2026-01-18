@@ -8,18 +8,31 @@ export function renderMenu(items) {
     return;
   }
 
-  containerMenu.innerHTML = items.map(item => {
-    const status = validarStatusDeliveryMenu(item);
-    const emPromocao = item.promotion === true;
-    const indisponivel = item.available === false;
-    
-    const precoPromocional = emPromocao ? (item.price * 0.8).toFixed(2) : null;
+  containerMenu.innerHTML = items
+    .sort((a, b) => {
+      if (a.promotion !== b.promotion) {
+        return a.promotion ? -1 : 1
+      }
 
-    let classeCSS = '';
-    if (indisponivel) classeCSS = 'indisponivel';
-    if (emPromocao) classeCSS = 'promocao';
+      if (a.available !== b.available) {
+        return a.available ? -1 : 1
+      }
 
-    return `
+      return 0
+    })
+    .map(item => {
+      const status = validarStatusDeliveryMenu(item);
+      const emPromocao = item.promotion === true;
+      const indisponivel = item.available === false;
+
+      const precoPromocional = emPromocao ? (item.price * 0.8).toFixed(2) : null;
+
+
+      let classeCSS = '';
+      if (indisponivel) classeCSS = 'indisponivel';
+      if (emPromocao) classeCSS = 'promocao';
+
+      return `
       <div class="card-menu ${classeCSS}" id="card-${item.id}">
         ${emPromocao ? `<div class="badge-desconto">-20%</div>` : ''}
         
@@ -41,7 +54,7 @@ export function renderMenu(items) {
         </button>
       </div>
     `;
-  }).join("");
+    }).join("");
 
   console.log(" Menu renderizado visualmente!");
 }
